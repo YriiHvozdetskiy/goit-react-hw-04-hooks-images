@@ -1,26 +1,22 @@
-import { Component } from 'react';
+import { useState } from 'react';
 
-export class Searchbar extends Component {
-  state = {
-    value: '',
-  };
+export const Searchbar =({onSubmit})=>{
+  const [value,setValue] = useState('')
 
-  handleChange = e => {
+  const handleChange = e => {
     const { value } = e.target;
-
-    this.setState({ value: value });
+    setValue(value)
   };
 
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    this.props.onSubmit(this.state.value);
+    onSubmit(value)
   };
 
-  render() {
     return (
       <>
         <header className="Searchbar">
-          <form className="SearchForm" onSubmit={this.handleSubmit}>
+          <form className="SearchForm" onSubmit={handleSubmit}>
             <button type="submit" className="SearchForm-button">
               <span className="SearchForm-button-label">Search</span>
             </button>
@@ -31,11 +27,10 @@ export class Searchbar extends Component {
               autoComplete="off"
               autoFocus
               placeholder="Search images and photos"
-              onChange={this.handleChange}
+              onChange={handleChange}
             />
           </form>
         </header>
       </>
     );
-  }
 }
