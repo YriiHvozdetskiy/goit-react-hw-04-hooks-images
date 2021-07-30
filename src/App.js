@@ -28,22 +28,8 @@ export function App() {
       .fetchImage()
       .finally(() => setLoading(false));
 
-    if (img.length !== 0) toast.success('success', {
-      style: {
-        color: '#fff',
-        background: 'green',
-      },
-      position: 'top-right',
-
-    });
-    if (img.length === 0) toast.error('nothing found', {
-      style: {
-        color: '#fff',
-        background: 'red',
-      },
-      position: 'top-right',
-
-    });
+    if (img.length !== 0) toast.success('success');
+    if (img.length === 0) toast.error('nothing found');
 
     setSearchImages(img);
   };
@@ -55,25 +41,10 @@ export function App() {
       .fetchImage()
       .finally(() => setLoading(false));
 
-    if (img.length !== 0) toast.success('success', {
-      style: {
-        color: '#fff',
-        background: 'green',
-      },
-      position: 'top-right',
-
-    });
-    if (img.length === 0) toast.error('nothing more was found', {
-      style: {
-        color: '#fff',
-        background: 'red',
-      },
-      position: 'top-right',
-
-    });
+    if (img.length !== 0) toast.success('success');
+    if (img.length === 0) toast.error('nothing more was found');
 
     setSearchImages(prev => [...prev, ...img]);
-
 
     window.scrollTo({
       top: document.documentElement.scrollHeight,
@@ -110,7 +81,7 @@ export function App() {
           <img src={selectedImage} alt={description} />
         </Modal>
       )}
-      <Toaster />
+      <Toaster position='top-right' toastOptions={toastStyle} />
     </>
   );
 }
@@ -120,4 +91,19 @@ const loaderStyles = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%,-50%)',
+};
+
+const toastStyle = {
+  success: {
+    style: {
+      color: '#fff',
+      background: 'green',
+    },
+  },
+  error: {
+    style: {
+      color: '#fff',
+      background: 'red',
+    },
+  },
 };

@@ -11,14 +11,7 @@ export const Searchbar =({onSubmit})=>{
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (!value) return toast.error('not correct input',{
-      style: {
-        color: '#fff',
-          background: 'red'
-      },
-      position: 'top-right',
-
-    })
+    if (!value) return toast.error('not correct input')
     onSubmit(value)
     setValue('')
   };
