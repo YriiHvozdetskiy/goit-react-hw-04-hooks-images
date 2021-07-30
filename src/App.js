@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 import Loader from 'react-loader-spinner';
 import { ImageGallery } from './components/ImageGallery';
 import { Searchbar } from './components/Searchbar';
@@ -8,35 +9,71 @@ import { Modal } from './components/Modal';
 
 const apiImages = new Api();
 
-export function App(){
- const [searchImages,setSearchImages] =  useState([])
- const [loading,setLoading] =  useState(false)
- const [description,setDescription] =  useState(null)
- const [selectedImage,setSelectedImage] =  useState(null)
+export function App() {
+  const [searchImages, setSearchImages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [description, setDescription] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+
 
   const searchbar = async value => {
     if (!value) return;
     apiImages.query = value;
     apiImages.resetPage();
 
-    setLoading(true)
-    setSearchImages([])
+    setLoading(true);
+    setSearchImages([]);
 
     const img = await apiImages
       .fetchImage()
       .finally(() => setLoading(false));
 
-      setSearchImages(img)
+    if (img.length !== 0) toast.success('success', {
+      style: {
+        color: '#fff',
+        background: 'green',
+      },
+      position: 'top-right',
+
+    });
+    if (img.length === 0) toast.error('nothing found', {
+      style: {
+        color: '#fff',
+        background: 'red',
+      },
+      position: 'top-right',
+
+    });
+
+    setSearchImages(img);
   };
 
   const loadMore = async () => {
-    setLoading(true)
+    setLoading(true);
 
     const img = await apiImages
       .fetchImage()
       .finally(() => setLoading(false));
 
-    setSearchImages(prev=> [...prev,...img])
+    if (img.length !== 0) toast.success('success', {
+      style: {
+        color: '#fff',
+        background: 'green',
+      },
+      position: 'top-right',
+
+    });
+    if (img.length === 0) toast.error('nothing more was found', {
+      style: {
+        color: '#fff',
+        background: 'red',
+      },
+      position: 'top-right',
+
+    });
+
+    setSearchImages(prev => [...prev, ...img]);
+
 
     window.scrollTo({
       top: document.documentElement.scrollHeight,
@@ -45,37 +82,39 @@ export function App(){
   };
 
   const openModal = (selectedImage, description) => {
-    setSelectedImage(selectedImage)
-    setDescription(description)
+    setSelectedImage(selectedImage);
+    setDescription(description);
   };
 
   const closeModal = () => {
-    setSelectedImage(null)
+    setSelectedImage(null);
   };
 
-    return (
-      <>
-        <Searchbar onSubmit={searchbar} />
-        {loading && (
-          <Loader
-            className="Overlay"
-            style={loaderStyles}
-            type="BallTriangle"
-            color="#00BFFF"
-            height={200}
-            width={200}
-          />
-        )}
-        <ImageGallery value={searchImages} openModal={openModal} />
-        {searchImages.length !== 0 && <Button onClick={loadMore} />}
-        {selectedImage && (
-          <Modal closeModal={closeModal}>
-            <img src={selectedImage} alt={description} />
-          </Modal>
-        )}
-      </>
-    );
+  return (
+    <>
+      <Searchbar onSubmit={searchbar} />
+      {loading && (
+        <Loader
+          className='Overlay'
+          style={loaderStyles}
+          type='BallTriangle'
+          color='#00BFFF'
+          height={200}
+          width={200}
+        />
+      )}
+      <ImageGallery value={searchImages} openModal={openModal} />
+      {searchImages.length !== 0 && <Button onClick={loadMore} />}
+      {selectedImage && (
+        <Modal closeModal={closeModal}>
+          <img src={selectedImage} alt={description} />
+        </Modal>
+      )}
+      <Toaster />
+    </>
+  );
 }
+
 const loaderStyles = {
   position: 'fixed',
   top: '50%',

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 export const Searchbar =({onSubmit})=>{
   const [value,setValue] = useState('')
@@ -10,6 +11,14 @@ export const Searchbar =({onSubmit})=>{
 
   const handleSubmit = e => {
     e.preventDefault();
+    if (!value) return toast.error('not correct input',{
+      style: {
+        color: '#fff',
+          background: 'red'
+      },
+      position: 'top-right',
+
+    })
     onSubmit(value)
     setValue('')
   };
