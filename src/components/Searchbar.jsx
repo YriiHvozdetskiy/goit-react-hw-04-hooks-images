@@ -25,6 +25,7 @@ export const Searchbar =({onSubmit})=>{
             <input
               className="SearchForm-input"
               type="text"
+              value={value} //тут потрібно value щоб очищати state через setValue('')
               autoComplete="off"
               autoFocus
               placeholder="Search images and photos"
